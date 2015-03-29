@@ -1,0 +1,14 @@
+#Ignore temp files
+*~
+
+#CLANG Residuals
+*.dSYM
+
+#Actual binary
+VirtualMemorySimulation
+
+#Object files
+*.o
+
+#Ignore clang scan-build output
+scan
