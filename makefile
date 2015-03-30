@@ -15,7 +15,7 @@ BIN = VirtualMemorySimulation
 _DEPS =
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = Simulation.o PCB.o PageTable.o
+_OBJ = Simulation.o Memory.o Process.o PCB.o PageTable.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all: setup $(BIN)
