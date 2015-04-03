@@ -38,6 +38,11 @@ void Simulation::Run(void) {
     unsigned long lineNumber = 0;
     uint16_t frame;
 
+    if(!file.is_open()) {
+        std::cerr << "File \"" << filepath << "\" could not be opened. Check to see if it exists" << std::endl;
+        exit(-1);
+    }
+
     //Iterate over each line of the file
     while(std::getline(file, line)) {
 
@@ -46,10 +51,10 @@ void Simulation::Run(void) {
             continue;
         }
 
-        values = StringUtilities::SplitString(line, ": ");
+        values = StringUtilities::SplitString(line, ":\t");
 
         if(values.size() < 2) {
-            std::cerr << "Error: Line " << lineNumber << ": \"" << line << "\" does not follow format of \"{NAME}: {Page #}\"" << std::endl;
+            std::cerr << "Error: Line " << lineNumber << ": \"" << line << "\" does not follow format of \"{NAME}:<TAB>{Page #}\"" << std::endl;
             exit(-1);
         }
 

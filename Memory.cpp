@@ -1,5 +1,10 @@
 #include "Memory.h"
 
+//Return a free frame
+bool Memory::GetFrameNumber(uint16_t * frame) {
+    //Scan through the free
+}
+
 //Reference a frame
 void Memory::Reference(uint16_t frame) {
     //Check if in memory
@@ -35,4 +40,5 @@ bool Memory::InFree(uint16_t frame) {
 //Requested frame is not in memory or free list --> Page Fault
 void Memory::PageFault(uint16_t frame) {
     //...
+    //Simulate reading in the frame from disk
 }

@@ -11,7 +11,15 @@ class Memory {
 public:
     Memory(void) {
         memory.clear();
+
+        //Generate 16kB of frames
+        for(int i = 0; i < MEM_SIZE; i++) {
+            free.insert(i);
+        }
     }
+
+    //Return a free frame
+    bool GetFreeFrame(uint16_t *);
 
     //Reference a frame
     void Reference(uint16_t);
@@ -27,7 +35,7 @@ private:
     void PageFault(uint16_t);
 
     std::vector<uint16_t> memory;       //List of frames in memory
-    std::queue<uint16_t> free;          //List of 'free' frames
+    std::set<uint16_t> free;            //List of 'free' frames
 };
 
 #endif//MEMORY_H
