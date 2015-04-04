@@ -14,11 +14,9 @@ Process::Process(const std::string & name) {
     references = 0;
     pageFaults = 0;
     size = 0;
-
-    //GENERATE PAGE TABLE, NO COLLISIONS WITH OTHER PROCESSES... NEED TO KNOW MEMORY OR DO THIS IN SIM
 }
 
-uint16_t Process::PageAccess(const std::string & string) {
+void Process::PageAccess(const std::string & string) {
     //Decode the string into the page number
     uint16_t page = DecodePageNumber(string);
 
@@ -30,12 +28,10 @@ uint16_t Process::PageAccess(const std::string & string) {
 
     //Increment number of references
     references++;
+}
 
-    //Determine which frame corresponds to the page number
-    uint16_t frame = pcb.GetPageTable().GetFrameNumber(page);
-
-    //Return the frame number
-    return frame;
+void Process::PageFault(void) {
+    pageFaults++;
 }
 
 //Display process statistics

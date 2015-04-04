@@ -59,7 +59,7 @@ void Simulation::Run(void) {
         }
 
         name = values.at(0);
-        page = values.at(1);
+        pageString = values.at(1);
 
         //New process: Add it to the map
         if(!processes.count(name)) {
@@ -67,12 +67,17 @@ void Simulation::Run(void) {
             processes[name] = process;
         }
 
-        //Register a page access on the process and get the corresponding frame number
+        //Get the process object
         Process & process = processes.find(name)->second;
-        frame = process.PageAccess(page);
+        uint16_t page = process.PageAccess(pageString);
 
-        //Reference the frame in memory
-        memory.Reference(frame);
+        //Reference the process page in memory
+        // This could result in one of three things:
+        // 1. There is already a frame associated with the page number, and it is already in memory
+        // 2. There is already a frame associated with the page number, and it is on the free frame list
+        // 3. There is no frame associated with this page number --> Page fault: Assign it a page number and bring frame into
+        //     memory
+        memory.Reference(process, page);
 
         //Increment line number
         lineNumber++;
