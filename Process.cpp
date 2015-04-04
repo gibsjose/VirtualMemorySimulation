@@ -16,7 +16,7 @@ Process::Process(const std::string & name) {
     size = 0;
 }
 
-void Process::PageAccess(const std::string & string) {
+uint16_t Process::PageAccess(const std::string & string) {
     //Decode the string into the page number
     uint16_t page = DecodePageNumber(string);
 
@@ -28,6 +28,8 @@ void Process::PageAccess(const std::string & string) {
 
     //Increment number of references
     references++;
+
+    return page;
 }
 
 void Process::PageFault(void) {

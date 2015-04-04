@@ -33,7 +33,7 @@ void Simulation::Run(void) {
     std::string line;
     std::vector<std::string> values;
     std::string name;
-    std::string page;
+    std::string pageString;
 
     unsigned long lineNumber = 0;
     uint16_t frame;

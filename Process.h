@@ -12,7 +12,7 @@ class Process {
 public:
     Process(void);
     Process(const std::string &);
-    void PageAccess(const std::string &);
+    uint16_t PageAccess(const std::string &);
     void PageFault(void);
     void DisplayStatistics(void);
     PageTable & GetPageTable(void) { return pcb.GetPageTable(); }

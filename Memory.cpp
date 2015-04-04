@@ -1,12 +1,7 @@
 #include "Memory.h"
 
-//Return a free frame
-bool Memory::GetFrameNumber(uint16_t * frame) {
-    //Scan through the free
-}
-
 //Reference a frame
-void Reference(Process & process, uint16_t page); {
+void Memory::Reference(Process & process, uint16_t page) {
 
     //Check to see if the process already has an entry in it's page table
     if(process.GetPageTable().EntryExists(page)) {
@@ -14,13 +9,13 @@ void Reference(Process & process, uint16_t page); {
         uint16_t frame = process.GetPageTable().GetEntry(page).frame;
 
         //Check to see if it is already in RAM or if it is in the free frame list
-        if(InMemory(frame)) {
+        if(InRAM(frame)) {
             //...nothing to do...
             std::cout << "Frame " << frame << " already in RAM" << std::endl;
             return;
         }
 
-        else if(InFree(frame)) {
+        else if(InFreeFrameList(frame)) {
             std::cout << "Frame " << frame << " in free frame list" << std::endl;
             return;
         }
@@ -62,7 +57,7 @@ void Reference(Process & process, uint16_t page); {
             entry.ref = true;
             entry.dirty = false;
 
-            process.GetPageTable().AddEntry(page, entry)
+            process.GetPageTable().AddEntry(page, entry);
         }
     }
 }

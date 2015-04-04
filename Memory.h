@@ -28,10 +28,10 @@ public:
 
 private:
     //Selects a victim using the LRU algorithm
-    uint16_t Memory::SelectVictim(Process &);
+    uint16_t SelectVictim(Process &);
 
     //'Moves' a frame from the available set to the ram set
-    void Memory::AvailableToRAM(const uint16_t);
+    void AvailableToRAM(const uint16_t);
 
     //Returns whether or not there are any available frames
     bool AreFreeFrames(void);

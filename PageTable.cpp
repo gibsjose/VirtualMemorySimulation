@@ -31,7 +31,7 @@ bool PageTable::EntryExists(const uint16_t page) {
     return false;
 }
 
-void PageTable::AddEntry(const uint16_t page, const PageTableEntry & entry) {
+void PageTable::AddEntry(const uint16_t page, PageTableEntry & entry) {
     //Set the valid bit
     entry.valid = true;
 
