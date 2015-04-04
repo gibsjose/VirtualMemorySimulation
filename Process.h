@@ -13,6 +13,7 @@ public:
     Process(void);
     Process(const std::string &);
     uint16_t PageAccess(const std::string &);
+    const std::string & GetName(void) { return name; }
     void PageFault(void);
     void DisplayStatistics(void);
     PageTable & GetPageTable(void) { return pcb.GetPageTable(); }

@@ -1,4 +1,5 @@
 #include "Simulation.h"
+#include "Color.h"
 
 int main(int argc, char **argv) {
     Simulation simulation;
@@ -16,7 +17,7 @@ int main(int argc, char **argv) {
     simulation.SetInputFilepath(filepath);
     simulation.Run();
 
-    std::cout << "Simulation Complete:" << std::endl;
+    std::cout << std::endl << "Simulation Complete:" << std::endl;
 
     simulation.DisplayStatistics();
 }
@@ -65,6 +66,8 @@ void Simulation::Run(void) {
         if(!processes.count(name)) {
             Process process(name);
             processes[name] = process;
+
+            std::cout << std::endl << Color::Green("* [NEW PROCESS] ") << name << std::endl;
         }
 
         //Get the process object

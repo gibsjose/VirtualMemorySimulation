@@ -42,8 +42,9 @@ void Process::DisplayStatistics(void) {
     std::cout << "Process: \"" << name << "\"" << std::endl;
     std::cout << "-------------------------" << std::endl;
     std::cout << "Memory References: " << references << std::endl;
+    std::cout << "Page Faults: " << pageFaults << std::endl;
     std::cout << "Size in Pages: " << size << std::endl;
-    std::cout << "Fault Rate: " << (pageFaults / references) * 100 << "%" << std::endl;
+    std::cout << "Fault Rate: " << ((float)pageFaults / (float)references) * 100.0 << "%" << std::endl;
 }
 
 //Decodes a 6-character binary representation of a page number into a decimal number

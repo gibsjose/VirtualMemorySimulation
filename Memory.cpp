@@ -1,4 +1,5 @@
 #include "Memory.h"
+#include "Color.h"
 
 //Reference a frame
 void Memory::Reference(Process & process, uint16_t page) {
@@ -11,7 +12,7 @@ void Memory::Reference(Process & process, uint16_t page) {
         //Check to see if it is already in RAM or if it is in the free frame list
         if(InRAM(frame)) {
             //...nothing to do...
-            std::cout << "Frame " << frame << " already in RAM" << std::endl;
+            std::cout << Color::Green("*") << " Process " << process.GetName() << " (page " << page << " --> frame " << frame << ") already in RAM" << std::endl;
             return;
         }
 
@@ -29,7 +30,7 @@ void Memory::Reference(Process & process, uint16_t page) {
 
     //Process does NOT have an entry for this page: PAGE FAULT
     else {
-        std::cout << "Page fault for page " << page << std::endl;
+        std::cout << Color::Red("! [PAGE FAULT]") << " for process " << process.GetName() << " page " << page;
         process.PageFault();
 
         //Add an entry
@@ -42,11 +43,21 @@ void Memory::Reference(Process & process, uint16_t page) {
             entry.dirty = false;
 
             process.GetPageTable().AddEntry(page, entry);
+
+            //Move the frame from the available set to RAM
+            AvailableToRAM(entry.frame);
+
+            std::cout << ": Assigned " << Color::Green("free") << " frame " << entry.frame << std::endl;
         }
 
         //No free frames!
         //Must implement LRU to select a victim...
         else {
+            std::cout << std::endl;
+            std::cout << Color::Cyan("- [COLLISION]") << " LRU Replacement Needed for process " << process.GetName() << " page " << page;
+
+            std::cout << ": Assigned " << Color::Cyan("victim") << " frame " << entry.frame << std::endl;
+
             //Find a victim, remove it's entry from the page table (set entry.valid = false)
             //@TODO SelectVictim will call: process.GetPageTable().RemoveEntry(victimPage); <-- victimPage is whichever
             // page the LRU algorithm decides to boot off
@@ -58,6 +69,9 @@ void Memory::Reference(Process & process, uint16_t page) {
             entry.dirty = false;
 
             process.GetPageTable().AddEntry(page, entry);
+
+            //Move the frame from the available set to RAM
+            AvailableToRAM(entry.frame);
         }
     }
 }
@@ -87,7 +101,7 @@ bool Memory::AreFreeFrames(void) {
 //Return a free frame and remove it from the 'available' set
 uint16_t Memory::GetFreeFrame(void) {
     if(available.empty()) {
-        std::cerr << "Error: GetFreeFrame: No available frames" << std::endl;
+        std::cerr << Color::Red("Error: GetFreeFrame: No available frames") << std::endl;
         return INVALID_FRAME;
     }
 
