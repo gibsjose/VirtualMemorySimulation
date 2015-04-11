@@ -47,6 +47,14 @@ void Memory::Reference(Process & process, uint16_t page) {
             //Move the frame from the available set to RAM
             AvailableToRAM(entry.frame);
 
+            LRUEntry lruEntry;
+            lruEntry.process = &process;
+            lruEntry.page = page;
+            lruEntry.frame = entry.frame;
+
+            //Push the process, page, and frame to the LRU deque
+            lru.push_front(lruEntry);
+
             std::cout << ": Assigned " << Color::Green("free") << " frame " << entry.frame << std::endl;
         }
 
@@ -56,31 +64,41 @@ void Memory::Reference(Process & process, uint16_t page) {
             std::cout << std::endl;
             std::cout << Color::Cyan("- [COLLISION]") << " LRU Replacement Needed for process " << process.GetName() << " page " << page;
 
-            std::cout << ": Assigned " << Color::Cyan("victim") << " frame " << entry.frame << std::endl;
-
             //Find a victim, remove it's entry from the page table (set entry.valid = false)
-            //@TODO SelectVictim will call: process.GetPageTable().RemoveEntry(victimPage); <-- victimPage is whichever
-            // page the LRU algorithm decides to boot off
-            //
-            //@TODO Isn't this supposed to be global??? Will need to know ALL processes, or store the process in
-            // the ram set, so I can then have access to its page table to remove entries...
-            entry.frame = SelectVictim(process);
+            entry.frame = SelectVictim();
             entry.ref = true;
             entry.dirty = false;
 
+            std::cout << ": Assigned " << Color::Cyan("victim") << " frame " << entry.frame << std::endl;
+
             process.GetPageTable().AddEntry(page, entry);
 
-            //Move the frame from the available set to RAM
-            AvailableToRAM(entry.frame);
+            LRUEntry lruEntry;
+            lruEntry.process = &process;
+            lruEntry.page = page;
+            lruEntry.frame = entry.frame;
+
+            //Push back onto the LRU
+            lru.push_front(lruEntry);
         }
     }
 }
 
 //Select a victim process using the LRU algorithm and return its frame number
 // to be used by another page
-uint16_t Memory::SelectVictim(Process & process) {
-    //@TODO...
-    return 0;
+uint16_t Memory::SelectVictim(void) {
+    //LRU entry
+    LRUEntry entry;
+
+    //Get the least recently used entry
+    entry = lru.back();
+    lru.pop_back();
+
+    //Remove the page table entry from whichever process owned the frame being replaced
+    entry.process->GetPageTable().RemoveEntry(entry.page);
+
+    //Return the now available frame
+    return entry.frame;
 }
 
 //'Moves' a frame from 'available' (already erased...) into RAM

@@ -14,10 +14,6 @@ void PageTable::Print(void) {
     std::cout << std::endl;
     std::cout << "Page Table:" << std::endl;
     std::cout << "-------------------------" << std::endl;
-
-    // for(PageTableMap_t::iterator it = table.begin(); it != table.end(); ++it) {
-    //     std::cout << "Page " << it->first << " --> Frame " << it->second << std::endl;
-    // }
 }
 
 bool PageTable::EntryExists(const uint16_t page) {
@@ -37,6 +33,10 @@ void PageTable::AddEntry(const uint16_t page, PageTableEntry & entry) {
 
     //Store the entry in the page table
     table[page] = entry;
+}
+
+void PageTable::RemoveEntry(const uint16_t page) {
+    table.erase(page);
 }
 
 PageTableEntry & PageTable::GetEntry(const uint16_t page) {

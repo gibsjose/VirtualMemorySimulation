@@ -2,7 +2,7 @@
 #define PAGETABLE_H
 
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 struct PageTableEntry {
 public:
@@ -17,7 +17,7 @@ public:
 
 //Page Table Map:
 //    Page Number (KEY) --> Page Table Entry (VALUE)
-typedef std::map<uint16_t, PageTableEntry> PageTableMap_t;
+typedef std::unordered_map<uint16_t, PageTableEntry> PageTableMap_t;
 
 class PageTable {
 public:
@@ -26,7 +26,9 @@ public:
     void Print(void);
     bool EntryExists(const uint16_t);
     void AddEntry(const uint16_t, PageTableEntry &);
+    void RemoveEntry(const uint16_t);
     PageTableEntry & GetEntry(const uint16_t);
+    
 private:
     PageTableMap_t table;
     PageTableEntry invalid;
